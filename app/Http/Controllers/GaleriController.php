@@ -14,70 +14,89 @@ class GaleriController extends Controller
     }
 
     public function create()
-    {
-        return view('galeri.create');
+{
+    if (!auth()->check() || auth()->user()->role !== 'admin') {
+        abort(403, 'Akses ditolak - Hanya admin yang bisa menambah galeri.');
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'judul' => 'required',
-            'kegiatan' => 'required',
-            'tanggal' => 'nullable|date',
-            'foto' => 'required|image|max:2048',
-        ]);
+    return view('galeri.create');
+}
 
+public function store(Request $request)
+{
+    if (!auth()->check() || auth()->user()->role !== 'admin') {
+        abort(403, 'Akses ditolak - Hanya admin yang bisa menambah galeri.');
+    }
+
+    $validated = $request->validate([
+        'judul' => 'required',
+        'kegiatan' => 'required',
+        'tanggal' => 'nullable|date',
+        'foto' => 'required|image|max:2048',
+    ]);
+
+    $fotoPath = $request->file('foto')->store('galeri', 'public');
+
+    Galeri::create([
+        'judul' => $validated['judul'],
+        'kegiatan' => $validated['kegiatan'],
+        'tanggal' => $validated['tanggal'],
+        'foto' => $fotoPath,
+    ]);
+
+    return redirect()->route('galeri.index')->with('success', 'Galeri berhasil ditambahkan.');
+}
+
+public function edit(Galeri $galeri)
+{
+    if (!auth()->check() || auth()->user()->role !== 'admin') {
+        abort(403, 'Akses ditolak - Hanya admin yang bisa mengedit galeri.');
+    }
+
+    return view('galeri.edit', compact('galeri'));
+}
+
+public function update(Request $request, Galeri $galeri)
+{
+    if (!auth()->check() || auth()->user()->role !== 'admin') {
+        abort(403, 'Akses ditolak - Hanya admin yang bisa mengupdate galeri.');
+    }
+
+    $validated = $request->validate([
+        'judul' => 'required',
+        'kegiatan' => 'required',
+        'tanggal' => 'nullable|date',
+        'foto' => 'nullable|image|max:2048',
+    ]);
+
+    if ($request->hasFile('foto')) {
         $fotoPath = $request->file('foto')->store('galeri', 'public');
-
-        Galeri::create([
-            'judul' => $validated['judul'],
-            'kegiatan' => $validated['kegiatan'],
-            'tanggal' => $validated['tanggal'],
-            'foto' => $fotoPath,
-        ]);
-
-        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil ditambahkan.');
+        $galeri->foto = $fotoPath;
     }
 
-    public function edit(Galeri $galeri)
-    {
-        return view('galeri.edit', compact('galeri'));
+    $galeri->update([
+        'judul' => $validated['judul'],
+        'kegiatan' => $validated['kegiatan'],
+        'tanggal' => $validated['tanggal'],
+        'foto' => $galeri->foto,
+    ]);
+
+    return redirect()->route('galeri.index')->with('success', 'Galeri berhasil diperbarui.');
+}
+
+public function destroy(Galeri $galeri)
+{
+    if (!auth()->check() || auth()->user()->role !== 'admin') {
+        abort(403, 'Akses ditolak - Hanya admin yang bisa menghapus galeri.');
     }
 
-    public function update(Request $request, Galeri $galeri)
-    {
-        $validated = $request->validate([
-            'judul' => 'required',
-            'kegiatan' => 'required',
-            'tanggal' => 'nullable|date',
-            'foto' => 'nullable|image|max:2048',
-        ]);
+    $galeri->delete();
+    return redirect()->route('galeri.index')->with('success', 'Galeri berhasil dihapus.');
+}
 
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('galeri', 'public');
-            $galeri->foto = $fotoPath;
-        }
-
-        $galeri->update([
-            'judul' => $validated['judul'],
-            'kegiatan' => $validated['kegiatan'],
-            'tanggal' => $validated['tanggal'],
-            'foto' => $galeri->foto,
-        ]);
-
-        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil diperbarui.');
-    }
-
-    public function destroy(Galeri $galeri)
-    {
-        $galeri->delete();
-        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil dihapus.');
-    }
-    
-    public function show(Galeri $galeri)
+public function show(Galeri $galeri)
 {
     return view('galeri.show', compact('galeri'));
 }
-
 
 }

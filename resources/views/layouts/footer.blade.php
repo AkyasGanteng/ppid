@@ -1,4 +1,7 @@
-<footer class="footer mt-5 pt-5 text-white" style="background: linear-gradient(to bottom, #002244, #003566); border-top: 5px solid #ffc107; box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5);">
+<footer id="kontak" class="footer mt-5 pt-5 text-white" 
+    style="background: linear-gradient(to bottom, #002244, #003566); 
+           border-top: 5px solid #ffc107; 
+           box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5);">
 
     <div class="container">
         <!-- Logo atas -->

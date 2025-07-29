@@ -13,4 +13,9 @@ class Berita extends Model
 
     protected $fillable = ['judul', 'foto', 'teks', 'tanggal', 'penulis'];
 
+    // Relasi ke komentar
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

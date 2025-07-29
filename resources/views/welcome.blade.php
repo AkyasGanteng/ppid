@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PPID | GARUT')
+@section('title', 'PPID KOTA GARUT')
 
 @section('content')
 
@@ -19,9 +19,12 @@
     <div class="carousel-inner">
         {{-- Slide 1 --}}
         <div class="carousel-item active">
+            <picture>
+             <!-- Untuk Desktop -->
+        <source srcset="{{ asset('assets/slidermobile1.png') }}" media="(max-width: 1024px)">
             <img src="{{ asset('assets/slider3.png') }}" class="d-block w-100" alt="Slider 1"
                 style="max-height: 100vh; object-fit: cover; filter: brightness(0.7);">
-
+</picture>
             <div class="carousel-caption text-center" style="position: absolute; top: 50%; left: 5%; right: 5%; transform: translateY(-50%); padding: 15px; border-radius: 15px; animation: fadeIn 1s; z-index: 2;">
                 <div class="it-background">
                     <div class="data-stream"></div>
@@ -37,9 +40,13 @@
 
         {{-- Slide 2 --}}
         <div class="carousel-item">
+        <picture>
+              <!-- Untuk mobile -->
+              <source srcset="{{ asset('assets/slidermobile2.png') }}" media="(max-width: 1024px)">
+               <!-- Untuk Desktop -->
             <img src="{{ asset('assets/slider2.png') }}" class="d-block w-100" alt="Slider 2"
                 style="max-height: 100vh; object-fit: cover; filter: brightness(0.7);">
-
+</picture>
             <div class="carousel-caption text-center" style="position: absolute; top: 50%; left: 5%; right: 5%; transform: translateY(-50%); padding: 15px; border-radius: 15px; animation: fadeIn 1s; z-index: 2;">
                 <div class="it-background">
                     <div class="data-stream"></div>
@@ -182,6 +189,82 @@
     opacity: 1;
     transform: scale(1);
 }
+
+/* Animasi scroll untuk gambar slider */
+.carousel-item img {
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+/* Efek fade pada caption saat scroll */
+.carousel-caption {
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+/* Animasi saat halaman pertama kali dimuat */
+@keyframes sliderZoomIn {
+    0% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.carousel-item img.initial-animate {
+    animation: sliderZoomIn 1.5s ease-out forwards;
+}
+
+
+/* Efek masuk dengan gerogotan lebih smooth */
+@keyframes erodeIn {
+    0% {
+        clip-path: circle(0% at 50% 50%);
+        opacity: 0;
+        transform: scale(1.08);
+        filter: blur(10px);
+    }
+    50% {
+        opacity: 0.7;
+        filter: blur(5px);
+    }
+    100% {
+        clip-path: circle(150% at 50% 50%);
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Efek keluar dengan gerogotan lebih smooth */
+@keyframes erodeOut {
+    0% {
+        clip-path: circle(150% at 50% 50%);
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.6;
+        filter: blur(5px);
+    }
+    100% {
+        clip-path: circle(0% at 50% 50%);
+        opacity: 0;
+        transform: scale(0.95);
+        filter: blur(10px);
+    }
+}
+
+/* Terapkan durasi dan easing lebih lembut */
+.carousel-item.animate-in img {
+    animation: erodeIn 1.8s ease-in-out forwards;
+}
+.carousel-item.animate-out img {
+    animation: erodeOut 1.8s ease-in-out forwards;
+}
+
 </style>
 
 
@@ -427,6 +510,223 @@
         elements.forEach(el => observer.observe(el));
     });
 </script>
+
+<script>
+document.addEventListener('scroll', function () {
+    const scrollY = window.scrollY;
+    const sliders = document.querySelectorAll('.carousel-item img');
+    const captions = document.querySelectorAll('.carousel-caption');
+
+    sliders.forEach(img => {
+        img.style.transform = `translateY(${scrollY * 0.2}px)`; // Parallax
+        img.style.opacity = Math.max(1 - scrollY / 400, 0.6);   // Fade
+    });
+
+    captions.forEach(caption => {
+        caption.style.transform = `translateY(${scrollY * 0.3}px)`;
+        caption.style.opacity = Math.max(1 - scrollY / 300, 0.5);
+    });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const carousel = document.querySelector('#carouselExampleIndicators');
+    const items = carousel.querySelectorAll('.carousel-item');
+    let lastIndex = 0;
+
+    carousel.addEventListener('slide.bs.carousel', function (event) {
+        items.forEach(item => {
+            item.classList.remove('animate-in', 'animate-out');
+        });
+
+        // Slide yang akan masuk
+        items[event.to].classList.add('animate-in');
+
+        // Slide yang keluar
+        items[lastIndex].classList.add('animate-out');
+
+        lastIndex = event.to;
+    });
+});
+</script>
+
+<style>
+/* Responsif untuk perangkat dengan lebar <= 768px */
+@media (max-width: 768px) {
+    /* Gambar slider */
+    .carousel-item img {
+        max-height: 60vh;
+        object-fit: cover;
+    }
+
+    /* Caption agar lebih kecil */
+    .carousel-caption {
+        font-size: 0.85rem;
+        padding: 10px;
+        top: 50%;
+        left: 10%;
+        right: 10%;
+        transform: translateY(-50%);
+    }
+
+    /* Partikel lebih kecil */
+    .particle {
+        width: 4px;
+        height: 4px;
+    }
+
+    /* Tombol navigasi lebih kecil */
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 25px;
+        height: 25px;
+        background-size: 100% 100%;
+    }
+}
+
+/* Responsif untuk perangkat sangat kecil (mobile < 480px) */
+@media (max-width: 480px) {
+    .carousel-item img {
+        max-height: 50vh;
+    }
+
+    .carousel-caption {
+        font-size: 0.75rem;
+        padding: 8px;
+    }
+
+    .particle {
+        width: 3px;
+        height: 3px;
+    }
+
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* --- Responsivitas Gambar Slider --- */
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    object-fit: cover;
+}
+
+/* Tablet (<= 768px) */
+@media (max-width: 768px) {
+    .carousel-item img {
+        max-height: 65vh;
+    }
+    .carousel-caption {
+        font-size: 0.9rem;
+        padding: 12px;
+        top: 50%;
+        left: 8%;
+        right: 8%;
+    }
+}
+
+/* Mobile (<= 480px) */
+@media (max-width: 480px) {
+    .carousel-item img {
+        max-height: 55vh;
+    }
+    .carousel-caption {
+        font-size: 0.8rem;
+        padding: 10px;
+    }
+}
+
+/* Existing animations remain unchanged */
+
+/* Responsiveness based on the left example */
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    object-fit: cover;
+}
+
+@media (max-width: 1200px) {
+    .carousel-item img {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 992px) {
+    .carousel-item img {
+        max-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-item img {
+        max-height: 300px;
+    }
+    .carousel-caption {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-item img {
+        max-height: 250px;
+    }
+    .carousel-caption {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-item img {
+        max-height: 200px;
+    }
+    .carousel-caption {
+        font-size: 0.7rem;
+        padding: 6px;
+    }
+    .particle {
+        width: 3px;
+        height: 3px;
+    }
+    .carousel-indicators button {
+        width: 6px;
+        height: 6px;
+    }
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 20px;
+        height: 20px;
+        background-size: 100% 100%;
+    }
+}
+
+/* Slider gambar responsive skala 1:1 tanpa terpotong */
+.carousel-item img {
+    width: 100%;
+    aspect-ratio: 1 / 1;   /* menjaga kotak persegi */
+    object-fit: contain;   /* seluruh gambar terlihat */
+    background: #000;      /* warna latar belakang hitam agar rapi */
+}
+
+/* Desktop - tetap tinggi penuh tanpa terpotong */
+@media (min-width: 992px) {
+    .carousel-item img {
+        aspect-ratio: auto;
+        height: 100vh;
+        object-fit: contain;
+    }
+}
+
+
+
+</style>
+
 
 
 

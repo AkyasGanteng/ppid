@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Beranda | SIDOGAR')</title>
+    <title>@yield('title', 'Beranda  SIDOGAR')</title>
     <link rel="icon" href="{{ asset('assets/Garut.png') }}" type="image/png">
 
     <!-- Bootstrap & FontAwesome -->
@@ -44,6 +44,70 @@
 
     /* Tambahan opsional: border bawah */
     border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Menu navbar untuk mobile */
+@media (max-width: 768px) {
+    .mobile-menu-header {
+        background: none;         /* Tidak ada warna atau gradasi */
+        padding: 15px;
+        border: none;             /* Hilangkan border bawah */
+        animation: fadeSlide 0.4s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    
+    .mobile-logo {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: transparent;  /* Hilangkan background putih */
+        padding: 0;               /* Hilangkan padding agar pas */
+        box-shadow: none;          /* Hilangkan bayangan */
+    }
+
+    .mobile-menu-header h5 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #003087;
+        margin-left: 10px;
+        background: transparent;
+    }
+
+    .btn-close {
+        background: none;
+        border: none;
+        color: #003087;
+        opacity: 0.8;
+        font-size: 1.8rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .btn-close:hover {
+        transform: rotate(90deg);
+        opacity: 1;
+    }
+
+    .mobile-menu-header hr {
+        display: none; /* Hilangkan garis */
+    }
+
+    @keyframes fadeSlide {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}
+
+
+
+        
+.navbar {
+    top: 40px; /* saat topbar terlihat */
+    transition: top 0.3s ease;
 }
 
 
@@ -212,6 +276,8 @@
         0 6px 12px rgba(0, 0, 0, 0.5),
         0 12px 24px rgba(0, 0, 0, 0.3),
         0 0 10px rgba(255, 215, 0, 0.6); /* efek glow emas */
+
+
 }
 
 
@@ -288,7 +354,33 @@ section.container.mt-5 {
     z-index: 2;
 }
 
-/* Untuk TOPBAR*/
+                                    /* ==== TOPBAR ==== */
+.topbar {
+    background: linear-gradient(90deg, #003087, #0054A6);
+    color: #fff;
+    font-size: 0.9rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+    transition: top 0.3s ease;
+    height: 40px;
+}
+
+.topbar a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.topbar a:hover {
+    color: #FFD700;
+}
+
+.navbar {
+    top: 40px; /* geser navbar agar tidak menimpa topbar */
+}
+
 
 
 
@@ -302,14 +394,25 @@ section.container.mt-5 {
 </head>
 <body>
 
-                                
+                                    <!-- TOPBAR -->
+<div id="topbar" class="topbar d-flex justify-content-between align-items-center px-4 py-2">
+    <div class="topbar-left">
+        <a href="mailto:ppid@garutkab.go.id" class="me-3">
+            <i class="fas fa-envelope"></i> ppid@garutkab.go.id
+        </a>
+        <a href="https://instagram.com/ppidgarut" target="_blank">
+            <i class="fab fa-instagram"></i> @ppidgarut
+        </a>
+    </div>
+</div>
+
 
 
 
                                     <!-- Navbar -->
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top px-4 shadow-sm" style="background: linear-gradient(90deg, #FFD700, #FFCA28);">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
             <img src="{{ asset('assets/LogoSidogar.png') }}" alt="Logo">
             <span>PPID GARUT</span>
         </a>
@@ -317,7 +420,22 @@ section.container.mt-5 {
             <span class="navbar-toggler-icon"></span>
         </button>
 
+       
         <div class="collapse navbar-collapse" id="mainNav">
+    <!-- Header menu mobile -->
+    <div class="mobile-menu-header d-lg-none">
+        <div class="d-flex justify-content-between align-items-center px-3">
+            <div class="d-flex align-items-center">
+                <img src="{{ asset('assets/LogoSidogar.png') }}" alt="Logo" class="mobile-logo me-2">
+                <h5 class="m-0">PPID GARUT</h5>
+            </div>
+            <button class="btn-close text-white fs-3" id="closeMobileMenu">&times</button>
+        </div>
+        <hr>
+    </div>
+
+   
+
             <ul class="navbar-nav ms-auto gap-2">
                 <li class="nav-item">
                     <a class="nav-link fw-bold" href="{{ route('home') }}">Home</a>
@@ -329,9 +447,9 @@ section.container.mt-5 {
                     <li><a class="dropdown-item" href="{{ route('profil.ppid') }}">Profil PPID</a></li>
 
                        
-                        <li><a class="dropdown-item" href="{{ route('sop-ppid') }}">SOP PPID</a></li>
+                        <li><a class="dropdown-item" href="{{ route('sop-ppid.index') }}">SOP PPID</a></li>
                         <li><a class="dropdown-item" href="{{ route('maklumat-layanan') }}">Maklumat Layanan</a></li>
-                        <li><a class="dropdown-item" href="{{ route('dasar-hukum') }}">Dasar Hukum</a></li>
+                        <li><a class="dropdown-item" href="{{ route('dasar-hukum.index') }}">Dasar Hukum</a></li>
                     </ul>
                 </li>
 
@@ -358,7 +476,9 @@ section.container.mt-5 {
                 </li>
 
                 <li class="nav-item">
-    <a class="nav-link fw-bold" href="{{ route('kontak') }}" style="color: #0054A6;">Kontak Kami</a>
+                <a class="nav-link fw-bold" href="#kontak" style="color: #0054A6;">Kontak Kami</a>
+
+
 </li>
 
 
@@ -421,6 +541,40 @@ section.container.mt-5 {
             document.querySelectorAll('.dropdown-toggle').forEach(el => new bootstrap.Dropdown(el));
         });
     </script>
+
+<script>
+    const topbar = document.getElementById('topbar');
+    const navbar = document.querySelector('.navbar');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', function() {
+        let currentScroll = window.pageYOffset;
+
+        if (currentScroll > 50 && currentScroll > lastScroll) {
+            // sembunyikan topbar dan geser navbar ke atas
+            topbar.style.top = '-40px';
+            navbar.style.top = '0';
+        } else {
+            // tampilkan kembali topbar dan kembalikan posisi navbar
+            topbar.style.top = '0';
+            navbar.style.top = '40px';
+        }
+
+        lastScroll = currentScroll;
+    });
+</script>
+
+<script>
+    document.getElementById('closeMobileMenu').addEventListener('click', function() {
+        const navbarCollapse = document.getElementById('mainNav');
+        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+            toggle: true
+        });
+    });
+</script>
+
+
+
     @stack('scripts')
 </body>
 </html>

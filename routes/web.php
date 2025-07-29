@@ -7,6 +7,9 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\DasarHukumController;
 use App\Http\Controllers\GaleriController;
 use App\Models\DasarHukum;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SopPpidController;
+
 
 // ===============================
 // HALAMAN UTAMA (PUBLIK)
@@ -33,9 +36,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // HALAMAN YANG HANYA BISA DIAKSES SETELAH LOGIN
 Route::middleware('auth')->group(function () {
     // Halaman dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    
+
+    Route::post('/berita/{berita}/comment', [CommentController::class, 'store'])->name('comments.store');
 
    
 
@@ -45,7 +48,9 @@ Route::middleware('auth')->group(function () {
 
     // CRUD PDF
     Route::resource('pdfs', PdfController::class);
-    Route::resource('dasarhukum', DasarHukumController::class);
+    // Ganti resource dasarhukum → dasar-hukum
+Route::resource('dasar-hukum', DasarHukumController::class)->middleware('auth');
+
    
     // CRUD GALERI
 
@@ -62,9 +67,7 @@ Route::get('/pendaftaran', function () {
     return view('pendaftaran');
 })->name('pendaftaran');
 
-Route::get('/sop-ppid', function () {
-    return view('sop-ppid');
-})->name('sop-ppid');
+Route::resource('sop-ppid', SopPpidController::class);
 
 Route::get('/maklumat-layanan', function () {
     return view('maklumat-layanan');
@@ -82,10 +85,8 @@ Route::get('/visimisi', function () {
     return view('visimisi');
 })->name('visimisi');
 
-Route::get('/dasar-hukum', function () {
-    $items = DasarHukum::all();
-    return view('dasar-hukum', compact('items'));
-})->name('dasar-hukum');
+
+
 Route::resource('galeri', GaleriController::class)->only(['index', 'show']);
 // Tampilkan form lupa password
 Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
