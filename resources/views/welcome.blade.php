@@ -371,23 +371,7 @@
             pointer-events: none;
          ">
          
-    <div class="container position-relative">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h3 class="fw-bold text-primary">Ingin Melakukan <br>Permohonan Informasi?</h3>
-                <p class="text-dark mt-2">
-                    Proses Permohonan Informasi akan diproses selambat-lambatnya <br>
-                    <strong>14 Hari Kerja</strong> setelah Proses Verifikasi Data dan Ajuan Permohonan
-                </p>
-            </div>
-            <div class="col-md-4 text-end">
-                <a href="{{ route('pendaftaran') }}" class="btn btn-warning rounded-pill px-4 py-2 me-2 fw-bold shadow">
-                    Ajukan Sekarang
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+    
 
 
 

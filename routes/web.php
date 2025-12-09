@@ -42,9 +42,6 @@ Route::middleware('auth')->group(function () {
 
    
 
-    Route::get('/pendaftaran', function () {
-        return view('pendaftaran');
-    })->name('pendaftaran');
 
     // CRUD PDF
     Route::resource('pdfs', PdfController::class);
@@ -63,9 +60,7 @@ Route::get('/kontak', function () {
     return view('kontak');
 })->name('kontak');
 
-Route::get('/pendaftaran', function () {
-    return view('pendaftaran');
-})->name('pendaftaran');
+
 
 Route::resource('sop-ppid', SopPpidController::class);
 

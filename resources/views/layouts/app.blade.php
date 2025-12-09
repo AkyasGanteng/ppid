@@ -466,14 +466,7 @@ section.container.mt-5 {
                     <a class="nav-link fw-bold" href="{{ route('ppid-pembantu') }}">PPID Pembantu</a>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">Permohonan Informasi</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">SOP Permohonan</a></li>
-                        <li><a class="dropdown-item" href="{{ route('pendaftaran') }}">Pendaftaran</a></li>
-                        <li><a class="dropdown-item" href="#">Cek Permohonan</a></li>
-                    </ul>
-                </li>
+                
 
                 <li class="nav-item">
                 <a class="nav-link fw-bold" href="#kontak" style="color: #0054A6;">Kontak Kami</a>
